@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dotenv from 'dotenv';
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+
+dotenv.config();
 
 export const metadata: Metadata = {
   title: "Create Next App",
