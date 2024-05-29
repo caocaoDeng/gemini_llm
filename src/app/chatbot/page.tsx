@@ -16,11 +16,9 @@ export default function ChatBot() {
 
   return (
     <main className="flex h-screen">
-      <nav className="w-64 border-dashed border border-indigo-600"></nav>
-      <div className="flex flex-col flex-1 border-dashed border border-indigo-600">
-        <div className="flex-1 border-dashed border border-indigo-300">
-          {text}
-        </div>
+      <nav className="w-64 bg-theme-100"></nav>
+      <div className="flex flex-col flex-1">
+        <div className="flex-1 p-2">{text}</div>
         <div className="flex flex-col justify-center items-center h-20">
           <Input handleSendMsg={handleSendMsg}></Input>
           <p className="text-xs leading-8 text-slate-500 scale-90">
