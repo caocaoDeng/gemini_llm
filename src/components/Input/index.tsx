@@ -32,8 +32,8 @@ export default function Input(props: IProps) {
       <div className="flex justify-center items-center gap-2">
         {children}
         <div
-          className={`flex justify-center items-center w-8 h-8 rounded-full cursor-pointer bg-theme-${
-            isEmpty ? 300 : 950
+          className={`flex justify-center items-center w-8 h-8 rounded-full cursor-pointer ${
+            isEmpty ? 'bg-theme-300' : 'bg-theme-950'
           }`}
         >
           <i className="iconfont icon-gengxin text-white !text-xl"></i>

@@ -1,0 +1,19 @@
+.msg-item {
+  max-width: 40%;
+  @apply flex items-center gap-2 mb-5 text-sm font-light;
+}
+.msg-item>.avatar {
+  @apply text-lg leading-none rounded-full p-2 bg-theme-200;
+}
+.msg-item>.text {
+  @apply px-2 py-1 rounded-md;
+}
+.user {
+  @apply self-end flex-row-reverse;
+}
+.user>.text {
+  @apply bg-theme-800 text-white;
+}
+.model>.text {
+  @apply bg-theme-100;
+}
