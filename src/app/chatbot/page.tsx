@@ -9,34 +9,31 @@ import { chatBotStateContext, chatBotDispatchContext } from './utils/context'
 import { chatBotReducer } from './utils/reducer'
 
 export default function ChatBot() {
-  const [chatBotData, dispatch] = useReducer(chatBotReducer, [])
-  const [msgData, setMsg] = useState<Content[]>([])
+  const [chatBotState, dispatch] = useReducer(chatBotReducer, {
+    active: 0,
+    chatSession: [],
+  })
+
   const [text, setText] = useState('')
 
-  const handleInitMsgData = async () => {
-    const res = await chatBotData[0].getHistory()
-    setMsg(res)
-  }
-
   const handleSendMsg = async (prompt: string) => {
-    const result = await chatBotData[0].sendMessage(prompt)
+    const result = await chatBotState.chatSession[0]?.sendMessage(prompt)
     const response = await result.response
     const text = response.text()
     setText(text)
   }
 
   useEffect(() => {
-    dispatch()
-    handleInitMsgData()
+    dispatch({ type: 'add' })
   }, [])
 
   return (
-    <chatBotStateContext.Provider value={chatBotData}>
+    <chatBotStateContext.Provider value={chatBotState}>
       <chatBotDispatchContext.Provider value={dispatch}>
         <article className="flex h-screen">
           <Sider></Sider>
           <div className="flex flex-col flex-1">
-            <ChatContent msgData={msgData}></ChatContent>
+            <ChatContent></ChatContent>
             <Action handleSendMsg={handleSendMsg}></Action>
           </div>
         </article>

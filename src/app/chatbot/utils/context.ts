@@ -1,7 +1,10 @@
 import { createContext } from 'react'
-import { ChatSession } from '@google/generative-ai'
-import { chatBotReducer } from './reducer'
-export const chatBotStateContext = createContext<ChatSession[]>([])
+import { IChatBotState, IAction } from './interface'
+export const chatBotStateContext = createContext<IChatBotState>({
+  active: 0,
+  chatSession: [],
+})
 
-export const chatBotDispatchContext =
-  createContext<React.DispatchWithoutAction | null>(null)
+export const chatBotDispatchContext = createContext<React.Dispatch<IAction>>(
+  () => {}
+)

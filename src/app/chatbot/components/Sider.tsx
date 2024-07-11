@@ -1,20 +1,42 @@
 import { useContext } from 'react'
-import model from '@/utils/model'
 import { chatBotStateContext, chatBotDispatchContext } from '../utils/context'
+import styles from './sider.module.css'
 
 export default function Sider() {
-  const cb = useContext(chatBotStateContext)
+  const chatBotState = useContext(chatBotStateContext)
   const dispatch = useContext(chatBotDispatchContext)
 
-  const createChatBot = () => {
-    dispatch && dispatch()
-  }
+  const createChatBot = () => dispatch({ type: 'add' })
+
+  const switchChatBot = (index: number) =>
+    dispatch({ type: 'active', chatBotIndex: index })
 
   return (
-    <article className="flex flex-col justify-between w-64 p-4 bg-theme-100">
-      <div>333</div>
+    <article className="flex flex-col items-center justify-between w-64 bg-theme-100">
+      <h1
+        style={{
+          backgroundImage:
+            'linear-gradient(90deg, #217BFE 0%, #078EFB 33.53%, #AC87EB 67.74%, #EE4D5D 100%)',
+        }}
+        className="w-max mt-4 text-3xl font-bold text-transparent bg-clip-text"
+      >
+        Gemini
+      </h1>
+      <ul className="w-full flex-1 flex flex-col gap-2 my-4 px-4 overflow-y-scroll">
+        {chatBotState.chatSession.map((chatSession, index) => (
+          <li
+            key={index}
+            className={`${styles['chat-bot-item']} ${
+              chatBotState.active === index ? styles['active'] : ''
+            }`}
+            onClick={() => switchChatBot(index)}
+          >
+            <div className="text-sm font-medium text-theme-900">ChitChat</div>
+          </li>
+        ))}
+      </ul>
       <button
-        className="w-full py-2 px-5 border border-dashed border-theme-600 rounded text-theme-600 bg-transparent shadow-md hover:border-theme-900 hover:text-theme-900"
+        className="w-full py-2 px-5 rounded text-theme-600 bg-theme-200 shadow hover:text-theme-900 hover:bg-theme-300"
         onClick={createChatBot}
       >
         <span className="text-2xl leading-none">+</span> chat bot

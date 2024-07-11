@@ -1,8 +1,8 @@
-import { ChatSession } from '@google/generative-ai'
 import model from '@/utils/model'
+import { IChatBotState, IAction } from './interface'
 
-export const chatBotReducer = (chatBot: ChatSession[]) => {
-  const chat = model.startChat({
+const createChatBot = () => {
+  return model.startChat({
     history: new Array(30)
       .fill(0)
       .map(() => [
@@ -20,5 +20,29 @@ export const chatBotReducer = (chatBot: ChatSession[]) => {
       maxOutputTokens: 100,
     },
   })
-  return [...chatBot, chat]
+}
+
+export const chatBotReducer = (
+  chatBotState: IChatBotState,
+  { type, chatBotIndex }: IAction
+) => {
+  switch (type) {
+    case 'add': {
+      const chat = createChatBot()
+      return {
+        ...chatBotState,
+        chatSession: [...chatBotState.chatSession, chat],
+      }
+    }
+
+    case 'active': {
+      return {
+        ...chatBotState,
+        active: <number>chatBotIndex,
+      }
+    }
+
+    default:
+      return chatBotState
+  }
 }
