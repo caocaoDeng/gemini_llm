@@ -4,12 +4,12 @@ import styles from './sider.module.css'
 
 export default function Sider() {
   const chatBotState = useContext(chatBotStateContext)
-  const dispatch = useContext(chatBotDispatchContext)
+  const chatbotDispatch = useContext(chatBotDispatchContext)
 
-  const createChatBot = () => dispatch({ type: 'add' })
+  const createChatBot = () => chatbotDispatch({ type: 'add' })
 
   const switchChatBot = (index: number) =>
-    dispatch({ type: 'active', chatBotIndex: index })
+    chatbotDispatch({ type: 'active', chatBotIndex: index })
 
   return (
     <article className="flex flex-col items-center justify-between w-64 bg-theme-100">

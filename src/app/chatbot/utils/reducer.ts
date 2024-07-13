@@ -1,21 +1,9 @@
+import { Content } from '@google/generative-ai'
 import model from '@/utils/model'
 import { IChatBotState, IAction } from './interface'
 
 const createChatBot = () => {
   return model.startChat({
-    history: new Array(30)
-      .fill(0)
-      .map(() => [
-        {
-          role: 'user',
-          parts: [{ text: 'Hello, I have 2 dogs in my house.' }],
-        },
-        {
-          role: 'model',
-          parts: [{ text: 'Great to meet you. What would you like to know?' }],
-        },
-      ])
-      .flat(),
     generationConfig: {
       maxOutputTokens: 100,
     },
@@ -45,4 +33,9 @@ export const chatBotReducer = (
     default:
       return chatBotState
   }
+}
+
+// TODO 添加清空逻辑
+export const messageReducer = (messageList: Content[], action: Content[]) => {
+  return [...messageList, ...action]
 }

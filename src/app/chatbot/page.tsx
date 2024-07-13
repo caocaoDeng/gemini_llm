@@ -1,41 +1,50 @@
 'use client'
 
-import React, { useEffect, useState, useReducer } from 'react'
-import { Content } from '@google/generative-ai'
+import React, { useEffect, useReducer, useState } from 'react'
 import Sider from './components/Sider'
 import ChatContent from './components/Content'
 import Action from './components/Actions'
-import { chatBotStateContext, chatBotDispatchContext } from './utils/context'
-import { chatBotReducer } from './utils/reducer'
+import { chatBotStateContext, chatBotDispatchContext, messageContext, messageDispatchContext } from './utils/context'
+import { chatBotReducer, messageReducer } from './utils/reducer'
 
 export default function ChatBot() {
-  const [chatBotState, dispatch] = useReducer(chatBotReducer, {
+  const [chatbotState, chatbotDispatch] = useReducer(chatBotReducer, {
     active: 0,
     chatSession: [],
   })
 
-  const [text, setText] = useState('')
+  const [messageList, messageDispatch] = useReducer(messageReducer, [])
 
-  const handleSendMsg = async (prompt: string) => {
-    const result = await chatBotState.chatSession[0]?.sendMessage(prompt)
-    const response = await result.response
-    const text = response.text()
-    setText(text)
+  // 获取 chatbot 历史消息
+  const getMessageList = async () => {
+    const { active, chatSession } = chatbotState
+    const messages = (await chatSession[active]?.getHistory()) || []
+    messageDispatch(messages)
   }
 
+  // 创建聊天机器人
   useEffect(() => {
-    dispatch({ type: 'add' })
+    chatbotDispatch({ type: 'add' })
   }, [])
 
+  // 监听聊天窗口切换
+  useEffect(() => {
+    getMessageList()
+  }, [chatbotState.active])
+
   return (
-    <chatBotStateContext.Provider value={chatBotState}>
-      <chatBotDispatchContext.Provider value={dispatch}>
+    <chatBotStateContext.Provider value={chatbotState}>
+      <chatBotDispatchContext.Provider value={chatbotDispatch}>
         <article className="flex h-screen">
           <Sider></Sider>
-          <div className="flex flex-col flex-1">
-            <ChatContent></ChatContent>
-            <Action handleSendMsg={handleSendMsg}></Action>
-          </div>
+          <messageContext.Provider value={messageList}>
+            <messageDispatchContext.Provider value={messageDispatch}>
+              <div className="flex flex-col flex-1">
+                <ChatContent></ChatContent>
+                <Action></Action>
+              </div>
+            </messageDispatchContext.Provider>
+          </messageContext.Provider>
         </article>
       </chatBotDispatchContext.Provider>
     </chatBotStateContext.Provider>

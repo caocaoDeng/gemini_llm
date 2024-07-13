@@ -8,13 +8,12 @@ export default function Input(props: IProps) {
 
   const [isEmpty, setIsEmpty] = useState(true)
 
-  const handleChange = (e: any) => {
-    setIsEmpty(!e.target.value)
-  }
+  const handleChange = (e: any) => setIsEmpty(!e.target.value)
 
   const handlePrompt = (e: any) => {
     if (e.key !== 'Enter') return
     const value = e.target.value
+    e.target.value = ''
     handleSendMsg(value)
   }
 
