@@ -1,15 +1,21 @@
 import { useContext } from 'react'
 import { chatBotStateContext, chatBotDispatchContext } from '../utils/context'
+import { ChatbotActionType } from '../utils/interface'
 import styles from './sider.module.css'
 
 export default function Sider() {
   const chatBotState = useContext(chatBotStateContext)
   const chatbotDispatch = useContext(chatBotDispatchContext)
 
-  const createChatBot = () => chatbotDispatch({ type: 'add' })
+  const createChatBot = () => chatbotDispatch({ type: ChatbotActionType.ADD })
 
-  const switchChatBot = (index: number) =>
-    chatbotDispatch({ type: 'active', chatBotIndex: index })
+  const switchChatBot = (uid: string) =>
+    chatbotDispatch({ type: ChatbotActionType.ACTIVE, uid })
+
+  const delChatbot = (e: React.MouseEvent, uid: string) => {
+    e.stopPropagation()
+    chatbotDispatch({ type: ChatbotActionType.DELETE, uid })
+  }
 
   return (
     <article className="flex flex-col items-center justify-between w-64 bg-theme-100">
@@ -23,24 +29,37 @@ export default function Sider() {
         Gemini
       </h1>
       <ul className="w-full flex-1 flex flex-col gap-2 my-4 px-4 overflow-y-scroll">
-        {chatBotState.chatSession.map((chatSession, index) => (
+        {chatBotState.chatSession.map((sessionItem, index) => (
           <li
-            key={index}
+            key={sessionItem.uid}
             className={`${styles['chat-bot-item']} ${
               chatBotState.active === index ? styles['active'] : ''
             }`}
-            onClick={() => switchChatBot(index)}
+            onClick={() => switchChatBot(sessionItem.uid as string)}
           >
-            <div className="text-sm font-medium text-theme-900">ChitChat</div>
+            <span className="text-sm font-medium text-theme-900">
+              ChitChat{sessionItem.uid?.slice(-6)}
+            </span>
+            <span
+              className={`${styles['icon-del']} iconfont icon-shanchu`}
+              style={{ fontSize: 22, lineHeight: '16px' }}
+              onClick={(e) => delChatbot(e, sessionItem.uid as string)}
+            ></span>
           </li>
         ))}
       </ul>
-      <button
-        className="w-full py-2 px-5 rounded text-theme-600 bg-theme-200 shadow hover:text-theme-900 hover:bg-theme-300"
-        onClick={createChatBot}
-      >
-        <span className="text-2xl leading-none">+</span> chat bot
-      </button>
+      <div className="w-full px-4 mb-2">
+        <button
+          className="flex items-center justify-center gap-2 w-full py-2 px-5 rounded text-theme-600 bg-theme-200 shadow hover:text-theme-900 hover:bg-theme-300"
+          onClick={createChatBot}
+        >
+          <span
+            className="iconfont icon-add"
+            style={{ fontSize: 20, lineHeight: 1 }}
+          ></span>
+          <span>New Chatbot</span>
+        </button>
+      </div>
     </article>
   )
 }

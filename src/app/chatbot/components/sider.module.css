@@ -1,7 +1,15 @@
 .chat-bot-item {
-  @apply p-3 border border-dashed border-theme-900 rounded shadow cursor-pointer opacity-60 hover:opacity-100;
+  @apply flex items-center justify-between p-3 border border-dashed border-theme-900 rounded shadow cursor-pointer opacity-60 hover:opacity-100;
 }
 
 .chat-bot-item.active {
   @apply opacity-100;
+}
+
+.chat-bot-item:hover .icon-del {
+  @apply block;
+}
+
+.icon-del {
+  @apply hidden;
 }

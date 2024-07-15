@@ -1,19 +1,22 @@
 import { ChatSession, Content } from '@google/generative-ai'
 
+export type ExtendChatSession = ChatSession & { uid?: string }
+
 export interface IChatBotState {
   active: number
-  chatSession: ChatSession[]
+  chatSession: ExtendChatSession[]
 }
 
 export interface IAction {
   type: string
-  chatBotIndex?: number
+  uid?: string
   content?: Content[]
 }
 
 export enum ChatbotActionType {
   ADD = 'add',
   ACTIVE = 'active',
+  DELETE = 'delete',
 }
 
 export enum ContentActionType {

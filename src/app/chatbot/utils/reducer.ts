@@ -1,37 +1,46 @@
 import { Content } from '@google/generative-ai'
-import model from '@/utils/model'
+import { v4 as uid } from 'uuid'
+import { createChatBot } from '@/utils'
 import {
+  ExtendChatSession,
   IChatBotState,
   IAction,
   ChatbotActionType,
   ContentActionType,
 } from './interface'
 
-const createChatBot = () => {
-  return model.startChat({
-    generationConfig: {
-      maxOutputTokens: 100,
-    },
-  })
-}
-
 export const chatBotReducer = (
   chatBotState: IChatBotState,
-  { type, chatBotIndex }: IAction
+  { type, uid: sessId }: IAction
 ) => {
   switch (type) {
     case ChatbotActionType.ADD: {
-      const chat = createChatBot()
+      // 为每个ChatSession创建唯一id
+      const chatSession: ExtendChatSession = createChatBot()
+      chatSession.uid = uid()
       return {
         ...chatBotState,
-        chatSession: [...chatBotState.chatSession, chat],
+        chatSession: [...chatBotState.chatSession, chatSession],
       }
     }
 
     case ChatbotActionType.ACTIVE: {
+      const active = chatBotState.chatSession.findIndex(
+        (sessionItem) => sessionItem.uid === sessId
+      )
       return {
         ...chatBotState,
-        active: <number>chatBotIndex,
+        active,
+      }
+    }
+
+    case ChatbotActionType.DELETE: {
+      const chatSession = chatBotState.chatSession.filter(
+        (sessionItem) => sessionItem.uid !== sessId
+      )
+      return {
+        ...chatBotState,
+        chatSession,
       }
     }
 
@@ -40,7 +49,6 @@ export const chatBotReducer = (
   }
 }
 
-// TODO 添加清空逻辑
 export const messageReducer = (
   messageList: Content[],
   { type = 'add', content = [] }: IAction
@@ -49,11 +57,13 @@ export const messageReducer = (
     case ContentActionType.ADD: {
       return [...messageList, ...content]
     }
+
     case ContentActionType.STREAM: {
       // 替换最后一个
       const preContent = messageList.slice(0, -1)
       return [...preContent, ...content]
     }
+
     case ContentActionType.CLEAR: {
       return []
     }
