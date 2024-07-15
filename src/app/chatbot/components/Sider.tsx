@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { chatBotStateContext, chatBotDispatchContext } from '../utils/context'
 import { ChatbotActionType } from '../utils/interface'
-import styles from './sider.module.css'
+import styles from './styles/sider.module.css'
 
 export default function Sider() {
   const chatBotState = useContext(chatBotStateContext)

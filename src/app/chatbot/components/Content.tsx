@@ -11,7 +11,7 @@ import rehypeRaw from 'rehype-raw'
 import 'katex/dist/katex.min.css'
 import { messageContext } from '../utils/context'
 import 'github-markdown-css'
-import styles from './content.module.css'
+import styles from './styles/content.module.css'
 
 export default function ChatContent() {
   const warp = useRef<HTMLDivElement>(null)
