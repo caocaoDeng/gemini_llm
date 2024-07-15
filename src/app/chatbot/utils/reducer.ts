@@ -54,6 +54,9 @@ export const messageReducer = (
       const preContent = messageList.slice(0, -1)
       return [...preContent, ...content]
     }
+    case ContentActionType.CLEAR: {
+      return []
+    }
 
     default:
       return messageList

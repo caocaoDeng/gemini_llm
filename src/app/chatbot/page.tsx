@@ -25,6 +25,10 @@ export default function ChatBot() {
   const getMessageList = async () => {
     const { active, chatSession } = chatbotState
     const messages = (await chatSession[active]?.getHistory()) || []
+    // 先清空消息
+    messageDispatch({
+      type: ContentActionType.CLEAR,
+    })
     messageDispatch({
       type: ContentActionType.ADD,
       content: messages,

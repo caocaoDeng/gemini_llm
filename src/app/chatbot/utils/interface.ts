@@ -19,4 +19,5 @@ export enum ChatbotActionType {
 export enum ContentActionType {
   ADD = 'add',
   STREAM = 'stream',
+  CLEAR = 'clear',
 }
