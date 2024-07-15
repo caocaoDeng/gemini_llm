@@ -11,9 +11,17 @@
   "dependencies": {
     "@google/generative-ai": "^0.11.4",
     "dotenv": "^16.4.5",
+    "github-markdown-css": "^5.6.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-markdown": "^9.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "rehype-katex": "^7.0.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
+    "remark-unwrap-images": "^4.0.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
