@@ -1,11 +1,17 @@
 'use client'
 
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import Sider from './components/Sider'
 import ChatContent from './components/Content'
 import Action from './components/Actions'
-import { chatBotStateContext, chatBotDispatchContext, messageContext, messageDispatchContext } from './utils/context'
+import {
+  chatBotStateContext,
+  chatBotDispatchContext,
+  messageContext,
+  messageDispatchContext,
+} from './utils/context'
 import { chatBotReducer, messageReducer } from './utils/reducer'
+import { ChatbotActionType, ContentActionType } from './utils/interface'
 
 export default function ChatBot() {
   const [chatbotState, chatbotDispatch] = useReducer(chatBotReducer, {
@@ -19,12 +25,15 @@ export default function ChatBot() {
   const getMessageList = async () => {
     const { active, chatSession } = chatbotState
     const messages = (await chatSession[active]?.getHistory()) || []
-    messageDispatch(messages)
+    messageDispatch({
+      type: ContentActionType.ADD,
+      content: messages,
+    })
   }
 
   // 创建聊天机器人
   useEffect(() => {
-    chatbotDispatch({ type: 'add' })
+    chatbotDispatch({ type: ChatbotActionType.ADD })
   }, [])
 
   // 监听聊天窗口切换

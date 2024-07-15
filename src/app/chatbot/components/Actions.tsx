@@ -1,29 +1,29 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { chatBotStateContext, messageDispatchContext } from '../utils/context'
+import { ContentActionType } from '../utils/interface'
+import { createContent } from '@/utils/index'
 import Input from '@/components/Input'
 
 export default function Action() {
-
   const { active, chatSession } = useContext(chatBotStateContext)
 
   const messageDispatch = useContext(messageDispatchContext)
 
-  const [resText, setResText] = useState<string>('')
-
   const handleSendMsg = async (prompt: string) => {
-    const userMsg = {
-      role: 'user',
-      parts: [{ text: prompt }]
-    }
-    const modelMsg = {
-      role: 'model',
-      parts: [{ text: resText }]
-    }
-    messageDispatch([userMsg, modelMsg])
+    const userMsg = createContent('user', prompt)
+    const modelMsg = createContent('model', '🤔思考中...')
+    messageDispatch({
+      type: ContentActionType.ADD,
+      content: [userMsg, modelMsg],
+    })
     const result = await chatSession[active].sendMessageStream(prompt)
+    let streamText = ''
     for await (const chunk of result.stream) {
-      const chunkText = chunk.text()
-      setResText(text => text += chunkText)
+      streamText += chunk.text()
+      messageDispatch({
+        type: ContentActionType.STREAM,
+        content: [createContent('model', streamText)],
+      })
     }
   }
 

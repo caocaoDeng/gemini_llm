@@ -1,4 +1,4 @@
-import { ChatSession } from '@google/generative-ai'
+import { ChatSession, Content } from '@google/generative-ai'
 
 export interface IChatBotState {
   active: number
@@ -8,4 +8,15 @@ export interface IChatBotState {
 export interface IAction {
   type: string
   chatBotIndex?: number
+  content?: Content[]
+}
+
+export enum ChatbotActionType {
+  ADD = 'add',
+  ACTIVE = 'active',
+}
+
+export enum ContentActionType {
+  ADD = 'add',
+  STREAM = 'stream',
 }

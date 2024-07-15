@@ -1,6 +1,11 @@
 import { Content } from '@google/generative-ai'
 import model from '@/utils/model'
-import { IChatBotState, IAction } from './interface'
+import {
+  IChatBotState,
+  IAction,
+  ChatbotActionType,
+  ContentActionType,
+} from './interface'
 
 const createChatBot = () => {
   return model.startChat({
@@ -15,7 +20,7 @@ export const chatBotReducer = (
   { type, chatBotIndex }: IAction
 ) => {
   switch (type) {
-    case 'add': {
+    case ChatbotActionType.ADD: {
       const chat = createChatBot()
       return {
         ...chatBotState,
@@ -23,7 +28,7 @@ export const chatBotReducer = (
       }
     }
 
-    case 'active': {
+    case ChatbotActionType.ACTIVE: {
       return {
         ...chatBotState,
         active: <number>chatBotIndex,
@@ -36,6 +41,21 @@ export const chatBotReducer = (
 }
 
 // TODO 添加清空逻辑
-export const messageReducer = (messageList: Content[], action: Content[]) => {
-  return [...messageList, ...action]
+export const messageReducer = (
+  messageList: Content[],
+  { type = 'add', content = [] }: IAction
+) => {
+  switch (type) {
+    case ContentActionType.ADD: {
+      return [...messageList, ...content]
+    }
+    case ContentActionType.STREAM: {
+      // 替换最后一个
+      const preContent = messageList.slice(0, -1)
+      return [...preContent, ...content]
+    }
+
+    default:
+      return messageList
+  }
 }

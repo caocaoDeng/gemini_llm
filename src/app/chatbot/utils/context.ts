@@ -12,4 +12,6 @@ export const chatBotDispatchContext = createContext<React.Dispatch<IAction>>(
 
 export const messageContext = createContext<Content[]>([])
 
-export const messageDispatchContext = createContext<React.Dispatch<Content[]>>(() => {})
+export const messageDispatchContext = createContext<React.Dispatch<IAction>>(
+  () => {}
+)
