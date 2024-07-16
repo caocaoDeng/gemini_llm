@@ -13,6 +13,10 @@ export const chatBotReducer = (
   chatBotState: IChatBotState,
   { type, uid: sessId }: IAction
 ) => {
+  const getIndex = () =>
+    chatBotState.chatSession.findIndex(
+      (sessionItem) => sessionItem.uid === sessId
+    )
   switch (type) {
     case ChatbotActionType.ADD: {
       // 为每个ChatSession创建唯一id
@@ -25,21 +29,23 @@ export const chatBotReducer = (
     }
 
     case ChatbotActionType.ACTIVE: {
-      const active = chatBotState.chatSession.findIndex(
-        (sessionItem) => sessionItem.uid === sessId
-      )
       return {
         ...chatBotState,
-        active,
+        active: getIndex(),
       }
     }
 
     case ChatbotActionType.DELETE: {
+      const index = getIndex()
+      const active =
+        index > chatBotState.active
+          ? chatBotState.active
+          : (chatBotState.active || 1) - 1
       const chatSession = chatBotState.chatSession.filter(
         (sessionItem) => sessionItem.uid !== sessId
       )
       return {
-        ...chatBotState,
+        active,
         chatSession,
       }
     }

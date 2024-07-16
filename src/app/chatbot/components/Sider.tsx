@@ -38,7 +38,7 @@ export default function Sider() {
             onClick={() => switchChatBot(sessionItem.uid as string)}
           >
             <span className="text-sm font-medium text-theme-900">
-              ChitChat{sessionItem.uid?.slice(-6)}
+              Gemini_{sessionItem.uid?.slice(-6)}
             </span>
             <span
               className={`${styles['icon-del']} iconfont icon-shanchu`}

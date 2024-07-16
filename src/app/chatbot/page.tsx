@@ -35,7 +35,7 @@ export default function ChatBot() {
     })
   }
 
-  // 创建聊天机器人
+  // 初始化一个聊天机器人
   useEffect(() => {
     chatbotDispatch({ type: ChatbotActionType.ADD })
   }, [])
@@ -44,6 +44,14 @@ export default function ChatBot() {
   useEffect(() => {
     getMessageList()
   }, [chatbotState.active])
+
+  // 清空历史记录
+  useEffect(() => {
+    !chatbotState.chatSession.length &&
+      messageDispatch({
+        type: ContentActionType.CLEAR,
+      })
+  }, [chatbotState.chatSession])
 
   return (
     <chatBotStateContext.Provider value={chatbotState}>
