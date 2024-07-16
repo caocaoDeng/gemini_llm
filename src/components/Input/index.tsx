@@ -8,13 +8,15 @@ export default function Input(props: IProps) {
 
   const [isEmpty, setIsEmpty] = useState(true)
 
-  const handleChange = (e: any) => setIsEmpty(!e.target.value)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setIsEmpty(!e.target.value)
 
-  const handlePrompt = (e: any) => {
-    if (e.key !== 'Enter') return
-    const value = e.target.value
-    e.target.value = ''
+  const handlePrompt = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value
+    if (e.key !== 'Enter' || !value) return
     handleSendMsg(value)
+    ;(e.target as HTMLInputElement).value = ''
+    setIsEmpty(true)
   }
 
   return (
