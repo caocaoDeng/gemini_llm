@@ -1,12 +1,14 @@
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { chatBotStateContext, messageDispatchContext } from '../utils/context'
 import { ContentActionType } from '../utils/interface'
 import { createContent } from '@/utils/index'
 import Input from '@/components/Input'
+import Upload, { IUploadEmitEvent } from '@/components/Upload/upload'
 
 export default function Action() {
-  const { active, chatSession } = useContext(chatBotStateContext)
+  const uploadDom = useRef<IUploadEmitEvent>(null)
 
+  const { active, chatSession } = useContext(chatBotStateContext)
   const messageDispatch = useContext(messageDispatchContext)
 
   const handleSendMsg = async (prompt: string) => {
@@ -29,7 +31,15 @@ export default function Action() {
 
   return (
     <div className="flex flex-col justify-center items-center h-20">
-      <Input handleSendMsg={handleSendMsg}></Input>
+      <Input handleSendMsg={handleSendMsg}>
+        <Upload ref={uploadDom}>
+          <i
+            className="iconfont icon-shangchuan cursor-pointer text-theme-300 hover:text-theme-900"
+            style={{ fontSize: 24, lineHeight: '16px' }}
+            onClick={() => uploadDom.current?.click()}
+          ></i>
+        </Upload>
+      </Input>
       <p className="text-xs leading-8 text-slate-500 scale-90">
         孩子会犯错，gemini也是
       </p>
