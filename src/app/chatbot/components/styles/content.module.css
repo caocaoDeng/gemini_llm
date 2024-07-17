@@ -1,6 +1,6 @@
 .msg-item {
-  max-width: 40%;
-  @apply flex items-center gap-2 mb-5 text-sm font-light;
+  max-width: 45%;
+  @apply flex items-start gap-4 mb-5 text-sm font-light;
 }
 
 .msg-item>.avatar {
@@ -8,7 +8,11 @@
 }
 
 .msg-item>.text {
-  @apply px-2 py-1 rounded-md;
+  @apply relative px-2 py-1 rounded-md;
+}
+
+.msg-item>.text::after {
+  @apply absolute top-2 w-0 border-8 border-solid border-transparent;
 }
 
 .user {
@@ -19,6 +23,10 @@
   @apply bg-theme-800 text-white;
 }
 
+.user>.text::after {
+  @apply right-0 translate-x-full border-l-theme-800;
+}
+
 .model {
   @apply self-start;
 }
@@ -27,9 +35,9 @@
   @apply bg-theme-100;
 }
 
-.markdown-body {
-  box-sizing: border-box;
-  margin: 0 auto;
+.model>.text::after {
+  transform: translateX(-100%);
+  @apply left-0 border-r-theme-100;
 }
 
 .markdown-body img {

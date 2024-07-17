@@ -28,7 +28,7 @@ export default function Sider() {
       >
         Gemini
       </h1>
-      <ul className="w-full flex-1 flex flex-col gap-2 my-4 px-4 overflow-y-scroll">
+      <ul className="w-full flex-1 flex flex-col gap-2 my-4 px-4 overflow-y-auto">
         {chatBotState.chatSession.map((sessionItem, index) => (
           <li
             key={sessionItem.uid}

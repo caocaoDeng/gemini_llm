@@ -3,7 +3,7 @@ import model from '@/utils/model'
 export const createChatBot = () => {
   return model.startChat({
     generationConfig: {
-      maxOutputTokens: 100,
+      maxOutputTokens: Infinity,
     },
   })
 }

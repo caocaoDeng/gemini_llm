@@ -27,7 +27,7 @@ export default function ChatContent() {
   })
 
   return (
-    <div className="flex-1 h-0 p-4 overflow-y-scroll" ref={warp}>
+    <div className="flex-1 h-0 p-4 overflow-y-auto" ref={warp}>
       <ul className="flex flex-col" ref={msgContainer}>
         {messageList.map(({ role, parts }, index) => (
           <li key={index} className={`${styles['msg-item']} ${styles[role]}`}>
