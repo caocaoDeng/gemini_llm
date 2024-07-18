@@ -1,19 +1,18 @@
 import { useContext, useRef } from 'react'
+import { Part } from '@google/generative-ai'
 import { chatBotStateContext, messageDispatchContext } from '../utils/context'
 import { Content, ContentActionType } from '../utils/interface'
 import { readFile } from '@/utils/index'
 import Input from '@/components/Input'
 import Upload, { IUploadEmitEvent } from '@/components/Upload/upload'
 
-export type ExtendFile = File & { base64: string }
+let inlineData: Part[] = []
 
 export default function Action() {
   const uploadDom = useRef<IUploadEmitEvent>(null)
 
   const { active, chatSession } = useContext(chatBotStateContext)
   const messageDispatch = useContext(messageDispatchContext)
-
-  const fileInfo: ExtendFile[] = []
 
   const handleSendMsg = async (prompt: string) => {
     const userMsg: Content = {
@@ -28,7 +27,8 @@ export default function Action() {
       type: ContentActionType.ADD,
       content: [userMsg, modelMsg],
     })
-    const result = await chatSession[active].sendMessageStream(prompt)
+    const result = await chatSession[active].sendMessageStream([prompt, ...inlineData])
+    inlineData = []
     let streamText = ''
     for await (const chunk of result.stream) {
       streamText += chunk.text()
@@ -48,16 +48,14 @@ export default function Action() {
     const fileList = e.target.files as FileList
     for (const f of fileList) {
       const base64 = await readFile(f)
-      ;(f as ExtendFile).base64 = base64
-      fileInfo.push(f as ExtendFile)
+      // 文件转生成对象
+      inlineData.push({
+        inlineData: {
+          data: base64,
+          mimeType: f.type
+        }
+      })
     }
-    // 文件转生成对象
-    const inlineData = fileInfo.map(({ base64, type }) => ({
-      inlineData: {
-        data: base64,
-        mimeType: type,
-      },
-    }))
     messageDispatch({
       type: ContentActionType.ADD,
       content: [
