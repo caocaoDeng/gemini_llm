@@ -1,6 +1,13 @@
-import { ChatSession, Content } from '@google/generative-ai'
+import { ChatSession, Part } from '@google/generative-ai'
 
 export type ExtendChatSession = ChatSession & { uid?: string }
+
+export type RoleType = 'user' | 'model'
+
+export interface Content {
+  role: RoleType
+  parts: Part[]
+}
 
 export interface IChatBotState {
   active: number

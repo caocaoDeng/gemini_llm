@@ -8,7 +8,7 @@
 }
 
 .msg-item>.text {
-  @apply relative px-2 py-1 rounded-md;
+  @apply relative p-2 rounded-md leading-none;
 }
 
 .msg-item>.text::after {
@@ -41,11 +41,19 @@
 }
 
 .markdown-body img {
-  display: inline-block !important;
+  display: inline-block;
 }
 
 @media (max-width: 767px) {
   .markdown-body {
     padding: 15px;
   }
+}
+
+.prompt-img {
+  @apply flex flex-col gap-2;
+}
+
+.prompt-img img {
+  @apply min-w-72 max-w-full;
 }

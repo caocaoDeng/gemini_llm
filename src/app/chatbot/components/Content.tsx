@@ -1,5 +1,6 @@
 import { useContext, useLayoutEffect, useRef } from 'react'
-import { Part } from '@google/generative-ai'
+import Image from 'next/image'
+import { Part, GenerativeContentBlob } from '@google/generative-ai'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkUnwrapImages from 'remark-unwrap-images'
@@ -20,7 +21,26 @@ export default function ChatContent() {
   const messageList = useContext(messageContext)
 
   const getResult = (parts: Part[]): string =>
-    parts.map((item) => item.text).join('')
+    parts.map(({ text }) => text).join('')
+
+  const ComContent = ({ parts }: { parts: Part[] }) => {
+    const [prompt] = parts
+    // 判断第一项是否是文本提示词
+    if (prompt.text) return <div>{getResult(parts)}</div>
+    return (
+      <div className={styles['prompt-img']}>
+        {parts.map(({ inlineData }, index) => (
+          <Image
+            key={index}
+            width={200}
+            height={200}
+            src={(inlineData as GenerativeContentBlob)?.data}
+            alt="prompt img"
+          />
+        ))}
+      </div>
+    )
+  }
 
   useLayoutEffect(() => {
     warp.current?.scrollTo(0, msgContainer.current?.offsetHeight || 0)
@@ -40,7 +60,7 @@ export default function ChatContent() {
               className={`${styles.text} markdown-body ${styles['markdown-body']}`}
             >
               {role === 'user' ? (
-                <span>{getResult(parts)}</span>
+                <ComContent parts={parts} />
               ) : (
                 <Markdown
                   remarkPlugins={[remarkGfm, remarkMath, remarkUnwrapImages]}
