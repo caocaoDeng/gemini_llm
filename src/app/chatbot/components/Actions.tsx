@@ -1,5 +1,5 @@
 import { useContext, useRef } from 'react'
-import { GenerativeContentBlob, Part } from '@google/generative-ai'
+import { Part } from '@google/generative-ai'
 import { chatBotStateContext, messageDispatchContext } from '../utils/context'
 import { Content, ContentActionType } from '../utils/interface'
 import { readFile2ArrayBuffer } from '@/utils/index'
@@ -14,19 +14,6 @@ export default function Action() {
   const { active, chatSession } = useContext(chatBotStateContext)
   const messageDispatch = useContext(messageDispatchContext)
 
-  // 移除base64前缀
-  const removeBase64Prefix = (): Part[] => {
-    return inlineData.map((item) => {
-      const inlineData = item.inlineData as GenerativeContentBlob
-      return {
-        inlineData: {
-          ...inlineData,
-          data: inlineData.data.split(',').at(1) as string,
-        },
-      }
-    })
-  }
-
   const handleSendMsg = async (prompt: string) => {
     const userMsg: Content = {
       role: 'user',
@@ -40,23 +27,27 @@ export default function Action() {
       type: ContentActionType.ADD,
       content: [userMsg, modelMsg],
     })
-    const result = await chatSession[active].sendMessageStream([
-      prompt,
-      ...removeBase64Prefix(),
-    ])
-    inlineData = []
-    let streamText = ''
-    for await (const chunk of result.stream) {
-      streamText += chunk.text()
-      messageDispatch({
-        type: ContentActionType.STREAM,
-        content: [
-          {
-            role: 'model',
-            parts: [{ text: streamText }],
-          },
-        ],
-      })
+    try {
+      const result = await chatSession[active].sendMessageStream([
+        prompt,
+        ...inlineData,
+      ])
+      inlineData = []
+      let streamText = ''
+      for await (const chunk of result.stream) {
+        streamText += chunk.text()
+        messageDispatch({
+          type: ContentActionType.STREAM,
+          content: [
+            {
+              role: 'model',
+              parts: [{ text: streamText }],
+            },
+          ],
+        })
+      }
+    } catch (error) {
+      alert('我也是会出错的')
     }
   }
 

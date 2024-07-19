@@ -8,7 +8,7 @@
 }
 
 .msg-item>.text {
-  @apply relative p-2 rounded-md leading-none;
+  @apply relative w-full p-2 rounded-md leading-5;
 }
 
 .msg-item>.text::after {
@@ -40,16 +40,6 @@
   @apply left-0 border-r-theme-100;
 }
 
-.markdown-body img {
-  display: inline-block;
-}
-
-@media (max-width: 767px) {
-  .markdown-body {
-    padding: 15px;
-  }
-}
-
 .prompt-media {
   @apply flex flex-col gap-2;
 }
@@ -61,4 +51,19 @@
 .prompt-media audio {
   width: 320px;
   height: 40px;
+}
+
+/* markdown样式 */
+.markdown-body img {
+  display: inline-block;
+}
+
+.markdown-body>pre {
+  padding: 0;
+}
+
+@media (max-width: 767px) {
+  .markdown-body {
+    padding: 15px;
+  }
 }

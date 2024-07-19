@@ -5,7 +5,7 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { okaidia as codeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import rehypeRaw from 'rehype-raw'
@@ -100,10 +100,11 @@ export default function ChatContent() {
                         <SyntaxHighlighter
                           {...rest}
                           PreTag="div"
+                          customStyle={{marginTop: 0}}
                           // eslint-disable-next-line react/no-children-prop
                           children={String(children).replace(/\n$/, '')}
                           language={match[1]}
-                          style={dark}
+                          style={codeTheme}
                         />
                       ) : (
                         <code {...rest} className={className}>
