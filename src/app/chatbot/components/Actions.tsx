@@ -1,8 +1,8 @@
 import { useContext, useRef } from 'react'
-import { Part } from '@google/generative-ai'
+import { GenerativeContentBlob, Part } from '@google/generative-ai'
 import { chatBotStateContext, messageDispatchContext } from '../utils/context'
 import { Content, ContentActionType } from '../utils/interface'
-import { readFile } from '@/utils/index'
+import { readFile2Base64 } from '@/utils/index'
 import Input from '@/components/Input'
 import Upload, { IUploadEmitEvent } from '@/components/Upload/upload'
 
@@ -13,6 +13,19 @@ export default function Action() {
 
   const { active, chatSession } = useContext(chatBotStateContext)
   const messageDispatch = useContext(messageDispatchContext)
+
+  // 移除base64前缀
+  const removeBase64Prefix = (): Part[] => {
+    return inlineData.map((item) => {
+      const inlineData = item.inlineData as GenerativeContentBlob
+      return {
+        inlineData: {
+          ...inlineData,
+          data: inlineData.data.split(',').at(1) as string,
+        },
+      }
+    })
+  }
 
   const handleSendMsg = async (prompt: string) => {
     const userMsg: Content = {
@@ -27,7 +40,10 @@ export default function Action() {
       type: ContentActionType.ADD,
       content: [userMsg, modelMsg],
     })
-    const result = await chatSession[active].sendMessageStream([prompt, ...inlineData])
+    const result = await chatSession[active].sendMessageStream([
+      prompt,
+      ...removeBase64Prefix(),
+    ])
     inlineData = []
     let streamText = ''
     for await (const chunk of result.stream) {
@@ -47,13 +63,17 @@ export default function Action() {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files as FileList
     for (const f of fileList) {
-      const base64 = await readFile(f)
+      // 需移除base64前缀
+      const base64 = await readFile2Base64(f)
+      // nodejs 将ArrayBuffer转Buffer，然后转base64 没有前缀
+      // const arrayBuffer = await readFile2ArrayBuffer(f)
+      // const base64 = Buffer.from(arrayBuffer).toString('base64')
       // 文件转生成对象
       inlineData.push({
         inlineData: {
           data: base64,
-          mimeType: f.type
-        }
+          mimeType: f.type,
+        },
       })
     }
     messageDispatch({
