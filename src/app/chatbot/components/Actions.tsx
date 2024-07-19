@@ -2,7 +2,7 @@ import { useContext, useRef } from 'react'
 import { GenerativeContentBlob, Part } from '@google/generative-ai'
 import { chatBotStateContext, messageDispatchContext } from '../utils/context'
 import { Content, ContentActionType } from '../utils/interface'
-import { readFile2Base64 } from '@/utils/index'
+import { readFile2ArrayBuffer } from '@/utils/index'
 import Input from '@/components/Input'
 import Upload, { IUploadEmitEvent } from '@/components/Upload/upload'
 
@@ -62,26 +62,28 @@ export default function Action() {
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files as FileList
+    const currentMediaPrompt: Part[] = []
     for (const f of fileList) {
-      // 需移除base64前缀
-      const base64 = await readFile2Base64(f)
+      // 需移除base64前缀 data:image/png;base64,
+      // const base64 = await readFile2Base64(f)
       // nodejs 将ArrayBuffer转Buffer，然后转base64 没有前缀
-      // const arrayBuffer = await readFile2ArrayBuffer(f)
-      // const base64 = Buffer.from(arrayBuffer).toString('base64')
+      const arrayBuffer = await readFile2ArrayBuffer(f)
+      const base64 = Buffer.from(arrayBuffer).toString('base64')
       // 文件转生成对象
-      inlineData.push({
+      currentMediaPrompt.push({
         inlineData: {
           data: base64,
           mimeType: f.type,
         },
       })
     }
+    inlineData = [...inlineData, ...currentMediaPrompt]
     messageDispatch({
       type: ContentActionType.ADD,
       content: [
         {
           role: 'user',
-          parts: inlineData,
+          parts: currentMediaPrompt,
         },
       ],
     })

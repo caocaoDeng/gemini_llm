@@ -50,10 +50,15 @@
   }
 }
 
-.prompt-img {
+.prompt-media {
   @apply flex flex-col gap-2;
 }
 
-.prompt-img img {
+.prompt-media img {
   @apply min-w-72 max-w-full;
+}
+
+.prompt-media audio {
+  width: 320px;
+  height: 40px;
 }

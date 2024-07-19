@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect, useRef } from 'react'
+import React, { useContext, useLayoutEffect, useRef } from 'react'
 import Image from 'next/image'
 import { Part, GenerativeContentBlob } from '@google/generative-ai'
 import Markdown from 'react-markdown'
@@ -24,19 +24,44 @@ export default function ChatContent() {
     parts.map(({ text }) => text).join('')
 
   const ComContent = ({ parts }: { parts: Part[] }) => {
-    const [prompt] = parts
+    // 根据mime类型渲染不同媒体标签
+    const renderMediaElm = (
+      inlineData: GenerativeContentBlob
+    ): React.ReactElement => {
+      const { mimeType, data } = inlineData
+      const uri = `data:${mimeType};base64,${data}`
+      const type = mimeType.split('/').at(0)
+      switch (type) {
+        case 'audio': {
+          return (
+            <audio controls>
+              <source src={uri} type={mimeType} />
+              Your browser does not support HTML5 audio.
+            </audio>
+          )
+        }
+
+        case 'video': {
+          return (
+            <video width="320" height="240" controls preload="auto">
+              <source src={uri} type={mimeType} />
+              Your browser does not support the video tag.
+            </video>
+          )
+        }
+
+        default:
+          return <Image width={200} height={200} src={uri} alt="prompt img" />
+      }
+    }
     // 判断第一项是否是文本提示词
-    if (prompt.text) return <div>{getResult(parts)}</div>
+    if (parts[0]?.text) return <div>{getResult(parts)}</div>
     return (
-      <div className={styles['prompt-img']}>
+      <div className={styles['prompt-media']}>
         {parts.map(({ inlineData }, index) => (
-          <Image
-            key={index}
-            width={200}
-            height={200}
-            src={(inlineData as GenerativeContentBlob)?.data}
-            alt="prompt img"
-          />
+          <React.Fragment key={index}>
+            {renderMediaElm(inlineData as GenerativeContentBlob)}
+          </React.Fragment>
         ))}
       </div>
     )
