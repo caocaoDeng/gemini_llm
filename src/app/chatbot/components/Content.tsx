@@ -82,7 +82,7 @@ export default function ChatContent() {
               }`}
             ></div>
             <div
-              className={`${styles.text} markdown-body ${styles['markdown-body']}`}
+              className={`${styles.text} markdown-body ${styles['markdown-body']} ${parts[0]?.text ? '' : styles.clear}`}
             >
               {role === 'user' ? (
                 <ComContent parts={parts} />
@@ -98,7 +98,6 @@ export default function ChatContent() {
                       const match = /language-(\w+)/.exec(className || '')
                       return match ? (
                         <SyntaxHighlighter
-                          {...rest}
                           PreTag="div"
                           customStyle={{marginTop: 0}}
                           // eslint-disable-next-line react/no-children-prop

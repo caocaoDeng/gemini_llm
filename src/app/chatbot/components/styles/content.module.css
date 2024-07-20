@@ -27,6 +27,14 @@
   @apply right-0 translate-x-full border-l-theme-800;
 }
 
+.user>.text.clear {
+  @apply p-0 bg-transparent;
+}
+
+.user>.text.clear::after {
+  @apply border-l-transparent;
+}
+
 .model {
   @apply self-start;
 }
@@ -41,16 +49,25 @@
 }
 
 .prompt-media {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col gap-2 rounded-md overflow-hidden;
 }
 
 .prompt-media img {
-  @apply min-w-72 max-w-full;
+  @apply min-w-80 max-w-full;
 }
 
 .prompt-media audio {
   width: 320px;
   height: 40px;
+}
+
+@media (width <= 1200px) {
+  .prompt-media img {
+    @apply min-w-full;
+  }
+  .prompt-media audio {
+    @apply max-w-full;
+  }
 }
 
 /* markdown样式 */

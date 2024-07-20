@@ -61,23 +61,23 @@ export default function Action() {
       const arrayBuffer = await readFile2ArrayBuffer(f)
       const base64 = Buffer.from(arrayBuffer).toString('base64')
       // 文件转生成对象
-      currentMediaPrompt.push({
+      const promptObj = {
         inlineData: {
           data: base64,
           mimeType: f.type,
         },
+      }
+      messageDispatch({
+        type: ContentActionType.ADD,
+        content: [{
+          role: 'user',
+          parts: [promptObj],
+        }],
       })
+      currentMediaPrompt.push(promptObj)
     }
     inlineData = [...inlineData, ...currentMediaPrompt]
-    messageDispatch({
-      type: ContentActionType.ADD,
-      content: [
-        {
-          role: 'user',
-          parts: currentMediaPrompt,
-        },
-      ],
-    })
+    currentMediaPrompt.forEach(async mediaPrompt => await chatSession[active].sendMessageStream([mediaPrompt]))
   }
 
   return (
