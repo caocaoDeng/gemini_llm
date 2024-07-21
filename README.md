@@ -12,7 +12,19 @@
 
 > 为什么叫 GG Bot 呢？刚好那会想到了 GG Bond(猪猪侠)，模型名称又以 G 开头，嘿嘿 完美。
 
+你可以克隆该项目，将环境文件中的`NEXT_PUBLIC_API_KEY`替换成自己的key，这样你就有了自己的 bot 了。
+
 ## Feature
+
+- 图片分析。
+  ![img prompt](./image/img-prompt.png)
+
+- 音频分析
+  ![](./image/audio-prompt.png)
+
+- 视频分析
+
+> 很多时候，输出的内容跟提示词(prompt)有着很大的关系。
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -45,8 +57,3 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
