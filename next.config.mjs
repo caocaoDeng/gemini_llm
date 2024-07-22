@@ -2,7 +2,7 @@
 const nextConfig = {
   // 静态导出
   output: 'export',
-  basePath: '/gemini',
+  basePath: '/gemini_llm',
   distDir: 'build',
   images: {
     remotePatterns: [
