@@ -43,7 +43,7 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Install dependencies
         run: yarn install # 或 pnpm install / npm ci / bun install
-      - name: Build with VitePress
+      - name: Build with next
         run: npm run build # 或 pnpm build / yarn build / bun build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
