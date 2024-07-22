@@ -1,3 +1,11 @@
+'use client'
+
+import { useEffect } from 'react'
+import { redirect, RedirectType } from 'next/navigation'
 export default function Home() {
-  return <main>home</main>
+  useEffect(() => {
+    redirect('/chatbot', RedirectType.replace)
+  }, [])
+
+  return <main></main>
 }

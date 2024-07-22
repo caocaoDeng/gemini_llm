@@ -62,6 +62,7 @@ export default function ChatBot() {
   // 监听聊天窗口切换
   useEffect(() => {
     getMessageList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatbotState.active])
 
   // 清空历史记录
