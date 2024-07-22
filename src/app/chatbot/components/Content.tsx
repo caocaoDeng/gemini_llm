@@ -23,7 +23,8 @@ export default function ChatContent() {
   const getResult = (parts: Part[]): string =>
     parts.map(({ text }) => text).join('')
 
-  const ComContent = ({ parts }: { parts: Part[] }) => {
+  const ComContent = ({ part, ...rest }: { key: number; part: Part }) => {
+    const { text, inlineData } = part
     // 根据mime类型渲染不同媒体标签
     const renderMediaElm = (
       inlineData: GenerativeContentBlob
@@ -54,15 +55,11 @@ export default function ChatContent() {
           return <Image width={200} height={200} src={uri} alt="prompt img" />
       }
     }
-    // 判断第一项是否是文本提示词
-    if (parts[0]?.text) return <div>{getResult(parts)}</div>
-    return (
-      <div className={styles['prompt-media']}>
-        {parts.map(({ inlineData }, index) => (
-          <React.Fragment key={index}>
-            {renderMediaElm(inlineData as GenerativeContentBlob)}
-          </React.Fragment>
-        ))}
+    return text ? (
+      <div>{text}</div>
+    ) : (
+      <div className={styles['prompt-media']} {...rest}>
+        {renderMediaElm(inlineData as GenerativeContentBlob)}
       </div>
     )
   }
@@ -82,10 +79,12 @@ export default function ChatContent() {
               }`}
             ></div>
             <div
-              className={`${styles.text} markdown-body ${styles['markdown-body']} ${parts[0]?.text ? '' : styles.clear}`}
+              className={`${styles.text} markdown-body ${
+                styles['markdown-body']
+              } ${parts[0]?.text ? '' : styles.clear}`}
             >
               {role === 'user' ? (
-                <ComContent parts={parts} />
+                parts.map((part) => <ComContent key={index} part={part} />)
               ) : (
                 <Markdown
                   remarkPlugins={[remarkGfm, remarkMath, remarkUnwrapImages]}
@@ -99,7 +98,7 @@ export default function ChatContent() {
                       return match ? (
                         <SyntaxHighlighter
                           PreTag="div"
-                          customStyle={{marginTop: 0}}
+                          customStyle={{ marginTop: 0 }}
                           // eslint-disable-next-line react/no-children-prop
                           children={String(children).replace(/\n$/, '')}
                           language={match[1]}

@@ -11,7 +11,11 @@ import {
   messageDispatchContext,
 } from './utils/context'
 import { chatBotReducer, messageReducer } from './utils/reducer'
-import { ChatbotActionType, ContentActionType } from './utils/interface'
+import {
+  Content,
+  ChatbotActionType,
+  ContentActionType,
+} from './utils/interface'
 
 export default function ChatBot() {
   const [chatbotState, chatbotDispatch] = useReducer(chatBotReducer, {
@@ -24,7 +28,22 @@ export default function ChatBot() {
   // 获取 chatbot 历史消息
   const getMessageList = async () => {
     const { active, chatSession } = chatbotState
-    const messages = (await chatSession[active]?.getHistory()) || []
+    let messages = ((await chatSession[active]?.getHistory()) ||
+      []) as Content[]
+    messages = messages
+      .map(({ role, parts }) => {
+        // 判断第一项是否是文本，是 放到最后
+        const isPromptText = !!parts[0]?.text
+        if (isPromptText) {
+          const firstItem = parts.splice(0, 1)
+          parts.push(...firstItem)
+        }
+        return parts.reduce(
+          (pre: Content[], part) => [...pre, { role, parts: [part] }],
+          []
+        )
+      })
+      .flat()
     // 先清空消息
     messageDispatch({
       type: ContentActionType.CLEAR,
