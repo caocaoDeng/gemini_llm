@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 静态导出
+  output: 'export',
   basePath: '/gemini',
   distDir: 'build',
   images: {
