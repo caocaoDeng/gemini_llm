@@ -2,6 +2,8 @@
 
 # GG Bot
 
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
 使用 Google 提供的 [Gemini API](https://ai.google.dev/gemini-api/docs?hl=zh-cn) 构建的一款文本生成式聊天应用，采用`gemini-1.5-flash`模型。在这里你将体验到 Google 最大、最强的 AI 模型 Gemini，支持多语言；可对图片、音频、视频等内容进行分析，将您的想法转化为切实可行且可大规模应用的应用。以下列举部分模型。
 
 | 模型变体         | 输入                   | 输出 | 优化目标                                                              |
@@ -20,7 +22,7 @@
   ![img prompt](./image/img-prompt.png)
 
 - 音频分析
-  ![](./image/audio-prompt.png)
+  ![audio prompt](./image/audio-prompt.png)
 
 - 视频分析
 
@@ -29,10 +31,11 @@
 ## Interesting
 
 - 可以帮助你解决学习中的一些难以理解或知识盲点的问题。
+  ![math answer](./image/answer.png)
 - 可以助你理解分析祖传代码逻辑，甚至可以帮你写代码以及提取、生成数据等，让你成为真正的 CV 工程师。
-- 生活得有乐趣：给阿姨来杯卡布奇诺。
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+  ![coding](./image/coding.png)
+- 生活得有乐趣：给阿姨倒杯卡布奇诺。
+  ![life](./image/life.png)
 
 ## Getting Started
 
@@ -50,15 +53,4 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+live preview [https://caocaodeng.github.io/gemini_llm](https://caocaodeng.github.io/gemini_llm)
